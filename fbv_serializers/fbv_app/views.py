@@ -1,12 +1,16 @@
-from rest_framework.generics import GenericAPIView
-from rest_framework.mixins import ListModelMixin, CreateModelMixin
-from rest_framework.mixins import RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import status
 from rest_framework.views import APIView
-
 from django.http import HttpRequest
+
+from rest_framework.mixins import ListModelMixin, CreateModelMixin, RetrieveModelMixin
+from rest_framework.mixins import UpdateModelMixin, DestroyModelMixin
+
+from rest_framework.generics import GenericAPIView, ListCreateAPIView, RetrieveUpdateDestroyAPIView
+
+from rest_framework.viewsets import ModelViewSet
+
 
 from .models import Student
 from .serializers import StudentSerializer
@@ -137,3 +141,20 @@ class StudentsDetailsWithMixin(RetrieveModelMixin, UpdateModelMixin, DestroyMode
 
     def delete(self, request: HttpRequest, pk: str) -> Response:
         return self.destroy(request, pk)
+
+
+# * class based views with generics - very good to simple CRUD with less code
+class StudentListGeneric(ListCreateAPIView):
+    queryset = Student.objects.all()
+    serializer_class = StudentSerializer
+
+
+class StudentDetailsGeneric(RetrieveUpdateDestroyAPIView):
+    queryset = Student.objects.all()
+    serializer_class = StudentSerializer
+
+
+# * ModelViewSet - very good to simple CRUD with less code and less code in urls.py
+class StudentViewSet(ModelViewSet):
+    queryset = Student.objects.all()
+    serializer_class = StudentSerializer
