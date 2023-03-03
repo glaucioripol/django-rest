@@ -33,3 +33,12 @@ python manage.py migrate
 ```bash
 python manage.py createsuperuser
 ```
+
+## filter which columns use in a model
+
+```python
+class Meta:
+    fields = ['name', 'email']
+```
+
+ 

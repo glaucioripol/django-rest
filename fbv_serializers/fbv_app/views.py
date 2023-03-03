@@ -5,8 +5,8 @@ from rest_framework.views import APIView
 
 from django.http import HttpRequest
 
-from fbv_app.models import Student
-from fbv_app.serializers import StudentSerializer
+from .models import Student
+from .serializers import StudentSerializer
 
 # Create your views here.
 
@@ -56,7 +56,7 @@ def student_by_id(request: HttpRequest, pk: str):
 
 class StudentAPIView(APIView):
 
-    def get(self, request: HttpRequest):
+    def get(self, _: HttpRequest):
         students = Student.objects.all()
         serializer = StudentSerializer(students, many=True)
 
@@ -74,29 +74,23 @@ class StudentAPIView(APIView):
 
 class StudentDetails(APIView):
 
-    def get_object(self, pk: str):
+    def get(self, _: HttpRequest, pk: str):
         try:
-            return Student.objects.get(pk=pk)
-        except Student.DoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
-
-    def get(self, request: HttpRequest, pk: str):
-        try:
-            student = self.get_object(pk)
+            student = Student.objects.get(pk=pk)
             serializer = StudentSerializer(student)
             return Response(serializer.data)
-        
+
         except Student.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
     def put(self, request: HttpRequest, pk: str):
         try:
-            student = self.get_object(pk)
+            student = Student.objects.get(pk=pk)
             serializer = StudentSerializer(student, data=request.data)
             if serializer.is_valid():
                 serializer.save()
                 return Response(serializer.data)
-            
+
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
         except Student.DoesNotExist:
@@ -104,9 +98,9 @@ class StudentDetails(APIView):
 
     def delete(self, _: HttpRequest, pk: str):
         try:
-            student = self.get_object(pk)
-            student.delete()
+            Student.objects.get(pk=pk).delete()
+
             return Response(status=status.HTTP_204_NO_CONTENT)
-        
+
         except Student.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
