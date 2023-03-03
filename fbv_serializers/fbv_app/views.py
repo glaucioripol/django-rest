@@ -1,3 +1,6 @@
+from rest_framework.generics import GenericAPIView
+from rest_framework.mixins import ListModelMixin, CreateModelMixin
+from rest_framework.mixins import RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import status
@@ -9,6 +12,8 @@ from .models import Student
 from .serializers import StudentSerializer
 
 # Create your views here.
+
+# * function based views - very good to simple logic
 
 
 @api_view(['GET', 'POST'])
@@ -54,6 +59,7 @@ def student_by_id(request: HttpRequest, pk: str):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
+# * class based views - very good to business logic
 class StudentAPIView(APIView):
 
     def get(self, _: HttpRequest):
@@ -104,3 +110,30 @@ class StudentDetails(APIView):
 
         except Student.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
+
+
+# * class based views with mixins - very good to simple CRUD
+
+class StudentListWithMixin(ListModelMixin, CreateModelMixin, GenericAPIView):
+    queryset = Student.objects.all()
+    serializer_class = StudentSerializer
+
+    def get(self, request: HttpRequest) -> Response:
+        return self.list(request)
+
+    def post(self, request: HttpRequest) -> Response:
+        return self.create(request)
+
+
+class StudentsDetailsWithMixin(RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin, GenericAPIView):
+    queryset = Student.objects.all()
+    serializer_class = StudentSerializer
+
+    def get(self, request: HttpRequest, pk: str) -> Response:
+        return self.retrieve(request, pk)
+
+    def put(self, request: HttpRequest, pk: str) -> Response:
+        return self.update(request, pk)
+
+    def delete(self, request: HttpRequest, pk: str) -> Response:
+        return self.destroy(request, pk)
