@@ -40,3 +40,43 @@ python manage.py createsuperuser
 class Meta:
     fields = ['name', 'email']
 ```
+
+## default pagination
+
+put this in settings.py
+
+```python
+# * Pagination default - it will be used for all the views
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10
+}
+```
+
+## filter
+
+install `django-filter`
+
+```bash
+pip install django-filter
+```
+
+add `django_filters` to `INSTALLED_APPS`
+
+```python
+INSTALLED_APPS = [
+    ...
+    'django_filters',
+]
+```
+
+defining as global
+
+```python
+# * Pagination default - it will be used for all the views
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 2,
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
+}
+```
