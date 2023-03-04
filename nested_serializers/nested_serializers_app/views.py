@@ -5,6 +5,9 @@ from rest_framework.generics import (
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter, OrderingFilter
 
+from rest_framework.authentication import BasicAuthentication
+from rest_framework.permissions import IsAuthenticated, DjangoModelPermissions
+
 from .models import Author, Book
 from .serializers import AuthorSerializer, BookSerializer
 from .pagination import AuthorPagination, BookPagination
@@ -15,6 +18,18 @@ class AuthorListView(ListCreateAPIView):
     queryset = Author.objects.all()
     serializer_class = AuthorSerializer
     pagination_class = AuthorPagination
+
+    # * using authentication - with basic authentication
+    # * user used was created with manage.py createsuperuser
+    authentication_classes = [BasicAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    # * using authentication - with django model permissions
+    # authentication_classes = [BasicAuthentication]
+    # * IsAuthenticated - user must be authenticated
+    # * DjangoModelPermissions - user must have the permission assigned to the model on admin
+    # permission_classes = [IsAuthenticated, DjangoModelPermissions]
+
     # * using django_filters, util for filtering per fields
     # filter_backends = [DjangoFilterBackend]
     # filterset_fields = ['first_name', 'last_name']

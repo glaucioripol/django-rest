@@ -75,8 +75,33 @@ defining as global
 ```python
 # * Pagination default - it will be used for all the views
 REST_FRAMEWORK = {
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 2,
+    ...
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
+}
+```
+
+## defining all routes should access just for authenticated users
+
+```python
+REST_FRAMEWORK = {
+    ...
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+        ...
+    ]
+}
+```
+
+## defining all routes should access just for authenticated users and django admin permission
+
+```python
+REST_FRAMEWORK = {
+    ...
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+        'rest_framework.permissions.DjangoModelPermissions',
+        'rest_framework.permissions.<permission-name>'
+    ]
 }
 ```
