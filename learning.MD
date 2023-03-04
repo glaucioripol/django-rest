@@ -40,5 +40,3 @@ python manage.py createsuperuser
 class Meta:
     fields = ['name', 'email']
 ```
-
- 
