@@ -20,8 +20,12 @@ class AuthorListView(ListCreateAPIView):
     # filterset_fields = ['first_name', 'last_name']
 
     # * using rest_framework filters
-    # ! it seems that it is a full text search
     filter_backends = [SearchFilter]
+    # * prefix in fields and your function will be called
+    # * "<field_name>" - contains
+    # * "ˆ<field_name>" - starts with
+    # * "=<field_name>" - exact match
+    # * "@<field_name>" - full text search(Currently only supported Django's PostgreSQL backend.)
     search_fields = ['first_name', 'last_name']
 
 
