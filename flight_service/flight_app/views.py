@@ -1,11 +1,13 @@
 from django.http import HttpRequest
+from django.contrib.auth.models import User
 
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework import status
 # * adding token authentication
 from rest_framework.permissions import IsAuthenticated
+
 
 from .models import Flight, Passenger, Reservation
 from .serializer import (
@@ -95,3 +97,18 @@ class PassengerViewSet(ModelViewSet):
 class ReservationViewSet(ModelViewSet):
     queryset = Reservation.objects.all()
     serializer_class = ReservationSerializer
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_user_from_token(request: HttpRequest):
+    user = request.user
+    # RETURN USER SERIALIZED
+
+    data = {
+        'id': user.id,
+        'username': user.username,
+        'email': user.get_email_field_name(),
+    }
+
+    return Response(data=data, status=status.HTTP_200_OK)

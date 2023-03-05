@@ -17,5 +17,6 @@ urlpatterns = [
     path('find-flight/', views.find_flight),
     path('save-reservation/', views.save_reservation),
     # * get token
-    path('api_token_auth/', obtain_auth_token, name='api_token_auth')
+    path('api_token_auth/', obtain_auth_token, name='api_token_auth'),
+    path('quero_token/', views.get_user_from_token, name='quero_token')
 ]

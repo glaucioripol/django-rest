@@ -227,3 +227,40 @@ REST_FRAMEWORK = {
 in the request header i should put this header `Authorization: Token <token>`
 
 and token is saved on table `authtoken_token`
+
+## configuring CORS
+
+install `django-cors-headers`
+
+```bash
+pip install django-cors-headers
+```
+
+add `corsheaders` to `INSTALLED_APPS`
+
+```python
+# settings.py
+
+INSTALLED_APPS = [
+    ...
+    'corsheaders',
+    ...
+]
+
+MIDDLEWARE = [
+    ...
+    'corsheaders.middleware.CorsMiddleware',
+    ...
+]
+
+ALLOWED_HOSTS = ['*']
+CORS_ORIGIN_ALLOW_ALL = True
+
+or 
+ALLOWED_HOSTS = []
+CORS_ORIGIN_ALLOW_ALL = False
+CORS_ORIGIN_WHITELIST=[
+    # * put the url of your frontend
+    'http://localhost:3000',
+]
+```
