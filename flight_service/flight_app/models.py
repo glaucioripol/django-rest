@@ -8,7 +8,7 @@ from datetime import datetime
 
 class Flight(Model):
     id = models.AutoField(primary_key=True)
-    flight_number = models.IntegerField(max_length=10)
+    flight_number = models.IntegerField()
     operating_airline = models.CharField(max_length=20)
     departure_city = models.CharField(max_length=20)
     arrival_city = models.CharField(max_length=20)

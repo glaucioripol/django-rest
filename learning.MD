@@ -209,17 +209,21 @@ class FlightSerializer(ModelSerializer):
 # setings.py
 
 INSTALLED_APPS = [
-
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
+    ...
     'rest_framework',
     'rest_framework.authtoken',
-    'flight_app'
-
+    ...
 ]
 
+REST_FRAMEWORK = {
+    ...
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ]
+}
+
 ```
+
+in the request header i should put this header `Authorization: Token <token>`
+
+and token is saved on table `authtoken_token`
