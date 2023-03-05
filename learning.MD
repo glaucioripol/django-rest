@@ -201,3 +201,25 @@ class FlightSerializer(ModelSerializer):
             validate_flight_data,
         ]
 ```
+
+## How to put authentication by token
+
+```python
+
+# setings.py
+
+INSTALLED_APPS = [
+
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'rest_framework',
+    'rest_framework.authtoken',
+    'flight_app'
+
+]
+
+```

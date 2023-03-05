@@ -4,6 +4,7 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
 
 from .models import Flight, Passenger, Reservation
 from .serializer import (
@@ -82,6 +83,7 @@ def save_reservation(request: HttpRequest):
 class FlightViewSet(ModelViewSet):
     queryset = Flight.objects.all()
     serializer_class = FlightSerializer
+    permission_classes = [IsAuthenticated]
 
 
 class PassengerViewSet(ModelViewSet):
