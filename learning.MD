@@ -105,3 +105,99 @@ REST_FRAMEWORK = {
     ]
 }
 ```
+
+## Validate data in serializer
+
+```python
+from rest_framework import serializers
+class FlightSerializer(ModelSerializer):
+    class Meta:
+        model = Flight
+        fields = '__all__'
+
+    def validate_flight_number(self, flight_number: int):
+        if (match(r'^\d$', str(flight_number)) == None):
+            raise serializers.ValidationError(
+                'Flight number must be a number'
+            )
+
+        return flight_number
+    # * field per field
+    def validate_<field_name>(self, <field_name>):
+        if (<field_name> == None):
+            raise serializers.ValidationError(
+                '<field_name> must be a number'
+            )
+
+        return <field_name>
+
+    # * all fields
+    def validate(self, data):
+        if (data['<field_name_in_your_model>'] == data['<field_name_in_your_model>']):
+            raise serializers.ValidationError(
+                'Flight number must be a number'
+            )
+
+        return data
+```
+
+with `validators`
+
+```python
+from django.core.validators import RegexValidator
+class FlightSerializer(ModelSerializer):
+    flight_number = serializers.CharField(
+        validators=[
+            RegexValidator(
+                regex=r'^\d+$',
+                message='Flight number must be a number'
+            )
+        ]
+    )
+```
+
+with `validators` and `fields`
+
+```python
+from django.core.validators import RegexValidator
+class FlightSerializer(ModelSerializer):
+    flight_number = serializers.CharField(
+        validators=[
+            RegexValidator(
+                regex=r'^\d+$',
+                message='Flight number must be a number'
+            )
+        ],
+        fields='__all__'
+    )
+```
+
+with array of `validators`
+
+```python
+def validate_flight_data(data: dict):
+    flight_number = data['flight_number']
+    if (match(r'^\d$', str(flight_number)) == None):
+        raise serializers.ValidationError(
+            'Flight number must be a number'
+        )
+
+    return flight_number
+
+class FlightSerializer(ModelSerializer):
+
+    arrival_city = serializers.CharField(
+        max_length=20,
+        error_messages={
+            'required': 'Arrival city is required',
+            'max_length': 'Arrival city must be less than 20 characters'
+        }
+    )
+
+    class Meta:
+        model = Flight
+        fields = '__all__'
+        validators = [
+            validate_flight_data,
+        ]
+```
